@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldTrack | Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2 class="logo">✦ GoldTrack</h2>
+
+    <nav>
+        <a href="#dashboard" class="active">▦ Dashboard</a>
+        <a href="#transactions">↕ Transactions</a>
+        <a href="#analytics">◉ Analytics</a>
+        <a href="#budget-section">▤ Budget</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <p>PERSONAL FINANCE</p>
+        <small>Manage your money wisely.</small>
+    </div>
+</div>
+
+<main class="main-content">
+
+    <header class="topbar">
+        <div>
+            <h1>Dashboard</h1>
+            <p id="today">Welcome back!</p>
+        </div>
+        <div class="profile">GT</div>
+    </header>
+
+    <section id="dashboard">
+
+        <div class="welcome">
+            <div>
+                <p>YOUR FINANCIAL OVERVIEW</p>
+                <h2>Track your money. Build your future.</h2>
+            </div>
+            <span>✦ GOLDTRACK</span>
+        </div>
+
+        <div class="summary-grid">
+
+            <div class="summary-card balance-card">
+                <p>Total Balance</p>
+                <h2 id="balance">₹0.00</h2>
+                <span>Available balance</span>
+            </div>
+
+            <div class="summary-card">
+                <p>Total Income</p>
+                <h2 id="income">₹0.00</h2>
+                <span class="positive">↗ Money received</span>
+            </div>
+
+            <div class="summary-card">
+                <p>Total Expenses</p>
+                <h2 id="expenses">₹0.00</h2>
+                <span class="negative">↘ Money spent</span>
+            </div>
+
+            <div class="summary-card">
+                <p>Today's Expenses</p>
+                <h2 id="todayExpense">₹0.00</h2>
+                <span>Today's spending</span>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="content-grid">
+
+        <div class="panel" id="budget-section">
+            <div class="section-heading">
+                <h2>Monthly Budget</h2>
+                <span class="gold-tag">BUDGET</span>
+            </div>
+
+            <p class="muted">Set your monthly spending limit</p>
+
+            <div class="budget-input">
+                <input type="number" id="budgetInput"
+                    placeholder="Enter budget in ₹" min="0">
+                <button onclick="setBudget()">Set Budget</button>
+            </div>
+
+            <div class="budget-details">
+                <span>Monthly spending</span>
+                <strong id="budgetSpent">₹0</strong>
+            </div>
+
+            <div class="progress-bar">
+                <div id="budgetProgress"></div>
+            </div>
+
+            <p id="budgetMessage" class="muted">
+                Set a budget to start tracking.
+            </p>
+        </div>
+
+        <div class="panel">
+            <div class="section-heading">
+                <h2>Quick Add</h2>
+                <span class="gold-tag">NEW</span>
+            </div>
+
+            <form id="transactionForm">
+
+                <label>Description</label>
+                <input type="text" id="description"
+                    placeholder="e.g. Grocery shopping" required>
+
+                <div class="form-row">
+                    <div>
+                        <label>Amount (₹)</label>
+                        <input type="number" id="amount"
+                            placeholder="Enter amount" min="0.01"
+                            step="0.01" required>
+                    </div>
+
+                    <div>
+                        <label>Type</label>
+                        <select id="type">
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Category</label>
+                <select id="category">
+                    <option value="Food">Food</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Education">Education</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Health">Health</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>Date</label>
+                <input type="date" id="date" required>
+
+                <button type="submit" class="add-btn" id="submitBtn">
+                    + Add Transaction
+                </button>
+
+                <button type="button" id="cancelEdit"
+                    class="cancel-btn hidden" onclick="cancelEditing()">
+                    Cancel Edit
+                </button>
+
+            </form>
+        </div>
+
+    </section>
+
+    <section class="content-grid analytics-grid" id="analytics">
+
+        <div class="panel">
+            <div class="section-heading">
+                <h2>Expense by Category</h2>
+            </div>
+            <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div class="panel">
+            <div class="section-heading">
+                <h2>Monthly Overview</h2>
+            </div>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+
+    </section>
+
+    <section class="panel transaction-panel" id="transactions">
+
+        <div class="section-heading">
+            <div>
+                <h2>Recent Transactions</h2>
+                <p class="muted">Manage all your transactions</p>
+            </div>
+            <span class="gold-tag">HISTORY</span>
+        </div>
+
+        <div class="filters">
+            <input type="search" id="search"
+                placeholder="Search transactions...">
+
+            <select id="filterType">
+                <option value="all">All Types</option>
+                <option value="income">Income</option>
+                <option value="expense">Expenses</option>
+            </select>
+
+            <select id="filterCategory">
+                <option value="all">All Categories</option>
+                <option>Food</option>
+                <option>Travel</option>
+                <option>Shopping</option>
+                <option>Education</option>
+                <option>Bills</option>
+                <option>Health</option>
+                <option>Entertainment</option>
+                <option>Salary</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionList"></tbody>
+            </table>
+        </div>
+
+        <p id="emptyMessage" class="empty-message">
+            No transactions found. Add your first transaction!
+        </p>
+
+    </section>
+
+    <footer>
+        <p>✦ GoldTrack | Daily Expense Tracker</p>
+        <small>Take control of your finances.</small>
+    </footer>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
